@@ -1,6 +1,12 @@
 # ComplexView
 ComplexView is a plain view to replace complex layouts on Android.
+## Getting started
 
+Add Gradle compile dependency:
+
+```groovy
+compile "io.litun:complex-view:0.1"
+```
 License
 =======
 
