@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'complex-view'
+
+    publishedGroupId = 'io.litun'
+    libraryName = 'ComplexView'
+    artifact = 'complex-view'
+
+    libraryDescription = 'A plain view to replace complex layouts on Android'
+
+    siteUrl = 'https://github.com/Litun/ComplexView'
+    gitUrl = 'https://github.com/Litun/ComplexView.git'
+
+    libraryVersion = '0.1'
+
+    developerId = 'litun'
+    developerName = 'Aleksander Litovchenko'
+    developerEmail = 'litunone@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -29,3 +53,6 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
