@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ComplexView</string>
+    <string name="train_schemes_text">Train schemes</string>
 </resources>
