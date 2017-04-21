@@ -21,4 +21,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TrainSchemesActivity.class);
         startActivity(intent);
     }
+
+    @OnClick(R.id.keyboard)
+    void openKeyboard() {
+        Intent intent = new Intent(this, KeyboardActivity.class);
+        startActivity(intent);
+    }
 }

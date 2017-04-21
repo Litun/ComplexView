@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ComplexView</string>
     <string name="train_schemes_text">Train schemes</string>
+    <string name="keyboard_text">Keyboard</string>
 </resources>

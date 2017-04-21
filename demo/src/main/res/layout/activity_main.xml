@@ -13,4 +13,11 @@
         android:layout_margin="8dp"
         android:text="@string/train_schemes_text" />
 
+    <Button
+        android:id="@+id/keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_margin="8dp"
+        android:text="@string/keyboard_text" />
+
 </LinearLayout>
