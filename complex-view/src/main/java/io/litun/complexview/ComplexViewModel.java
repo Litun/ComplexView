@@ -20,7 +20,7 @@ public class ComplexViewModel {
     public ComplexViewModel(Builder builder) {
         this.width = builder.width;
         this.height = builder.height;
-        this.layers = Collections.unmodifiableList(builder.layers);
+        this.layers = null;
     }
 
     public float getWidth() {
@@ -38,25 +38,20 @@ public class ComplexViewModel {
     public static class Builder {
         private float width;
         private float height;
-        private final List<List<MarkdownElement>> layers;
+        private List<MarkdownElement> elements;
+        private String fileName;
 
         public Builder() {
-            layers = new ArrayList<>();
-            layers.add(new ArrayList<MarkdownElement>());
+        }
+
+        public Builder setSourceFileName(String fileName) {
+            this.fileName = fileName;
+            return this;
         }
 
         public Builder setSize(float width, float height) {
             this.width = width;
             this.height = height;
-            return this;
-        }
-
-        public Builder addElement(int layer, MarkdownElement element) {
-            while (layer >= layers.size()) {
-                layers.add(new ArrayList<MarkdownElement>());
-            }
-            List<MarkdownElement> layerElements = layers.get(layer);
-            layerElements.add(element);
             return this;
         }
 

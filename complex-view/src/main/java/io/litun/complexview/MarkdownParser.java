@@ -1,5 +1,6 @@
 package io.litun.complexview;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.WorkerThread;
 
@@ -9,6 +10,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+
+import io.litun.complexview.model.MarkdownElement;
 
 /**
  * Created by Litun on 21.04.2017.
@@ -17,9 +21,11 @@ import java.io.InputStreamReader;
 public class MarkdownParser {
 
     private final Resources resources;
+    private final ResourceCache resourceCache;
 
-    public MarkdownParser(Resources resources) {
-        this.resources = resources;
+    public MarkdownParser(Context context, ResourceCache resourceCache) {
+        this.resources = context.getResources();
+        this.resourceCache = resourceCache;
     }
 
     @WorkerThread
@@ -35,7 +41,7 @@ public class MarkdownParser {
         return stringBuilder.toString();
     }
 
-    public JSONObject readJsonFile(String name) {
+    private JSONObject readJsonFile(String name) {
         try {
             String fileString = readFile(name);
             return new JSONObject(fileString);
@@ -43,5 +49,10 @@ public class MarkdownParser {
             e.printStackTrace();
         }
         return new JSONObject();
+    }
+
+    public List<MarkdownElement> parse(String name, MarkdownProcessor processor) {
+        JSONObject jsonObject = readJsonFile(name);
+        return processor.process(jsonObject, resourceCache);
     }
 }

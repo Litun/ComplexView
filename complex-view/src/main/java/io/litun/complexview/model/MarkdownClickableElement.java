@@ -18,7 +18,7 @@ public class MarkdownClickableElement extends MarkdownDrawableElement {
 
     public MarkdownClickableElement(MarkdownFrame frame, Drawable drawable,
                                     @ColorInt int seatColor, @ColorInt int selectColor, int number) {
-        super(frame, drawable, drawableRes);
+        super(frame, drawable);
         this.defaultColor = seatColor;
         this.selectColor = selectColor;
         this.number = number;
