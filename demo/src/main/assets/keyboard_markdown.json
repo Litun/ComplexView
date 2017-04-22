@@ -187,7 +187,7 @@
       "height": 58
     },
     {
-      "letter": "space",
+      "letter": "",
       "x": 425,
       "y": 655,
       "width": 140,
@@ -232,6 +232,13 @@
       "action": "backspace",
       "x": 605,
       "y": 593,
+      "width": 50,
+      "height": 58
+    },
+    {
+      "action": "enter",
+      "x": 605,
+      "y": 655,
       "width": 50,
       "height": 58
     },

@@ -26,6 +26,7 @@
         <io.litun.complexview.ComplexView
             android:id="@+id/keyboard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/keyboard_background" />
     </LinearLayout>
 </FrameLayout>

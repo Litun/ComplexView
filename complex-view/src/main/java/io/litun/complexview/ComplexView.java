@@ -34,7 +34,7 @@ public class ComplexView extends View {
     private ComplexViewModel viewModel;
     private float widthScale = 1f;
     private float heightScale = 1f;
-    private State state = State.OVERVIEW;
+    private State state = State.DETAILED;
     private float transitionProgress = 0f;
     private float fontRatio = 1f;
 
@@ -118,7 +118,7 @@ public class ComplexView extends View {
         }
 
         float ratio = viewModel != null ?
-                viewModel.getHeight() / viewModel.getWidth() :
+                viewModel.getMarkdown().getHeight() / viewModel.getMarkdown().getWidth() :
                 DEFAULT_RATIO;
 
         height = (int) (width * ratio);
@@ -136,15 +136,15 @@ public class ComplexView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (viewModel != null) {
-            widthScale = getWidth() / viewModel.getWidth();
-            heightScale = getHeight() / viewModel.getHeight();
+            widthScale = getWidth() / viewModel.getMarkdown().getWidth();
+            heightScale = getHeight() / viewModel.getMarkdown().getHeight();
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (viewModel != null) {
-            List<List<MarkdownElement>> layers = viewModel.getLayers();
+            List<List<MarkdownElement>> layers = viewModel.getMarkdown().getLayers();
             drawLayer(canvas, layers.get(State.OVERVIEW.getLayerNumber()), 1f);
             if (state == State.DETAILED) {
                 drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), 1f);
@@ -214,7 +214,7 @@ public class ComplexView extends View {
     private MarkdownClickableElement findSeatElement(float x, float y) {
         float markdownX = x / widthScale;
         float markdownY = y / heightScale;
-        List<MarkdownElement> overviewElements = viewModel.getLayers().get(ComplexViewModel.OVERVIEW_LAYER);
+        List<MarkdownElement> overviewElements = viewModel.getMarkdown().getLayers().get(0);
         for (MarkdownElement element : overviewElements) {
             if (element instanceof MarkdownClickableElement &&
                     insideFrame(markdownX, markdownY, element.getFrame())) {

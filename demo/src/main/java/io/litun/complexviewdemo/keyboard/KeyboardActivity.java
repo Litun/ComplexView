@@ -66,7 +66,7 @@ public class KeyboardActivity extends AppCompatActivity {
 
             @Override
             protected ComplexViewModel doInBackground(Void... params) {
-                return new ComplexViewModel.Builder()
+                return new ComplexViewModel.Builder(KeyboardActivity.this)
                         .setSourceFileName("keyboard_markdown.json")
                         .setMarkdownProcessor(KeyboardActivity::makeMarkdown)
                         .build();
@@ -84,12 +84,12 @@ public class KeyboardActivity extends AppCompatActivity {
         float x = keyboardMarkdownModel.getX();
         float y = keyboardMarkdownModel.getY();
         Markdown.Builder builder = new Markdown.Builder()
-                .setSize(keyboardMarkdownModel.getWidth() - x,
-                        keyboardMarkdownModel.getHeight() - y);
+                .setSize(keyboardMarkdownModel.getWidth(),
+                        keyboardMarkdownModel.getHeight());
         for (KeyboardMarkdownItem markdownItem : keyboardMarkdownModel.getItems()) {
             MarkdownFrame frame = new MarkdownFrame(
-                    markdownItem.getX(),
-                    markdownItem.getY(),
+                    markdownItem.getX() - x,
+                    markdownItem.getY() - y,
                     markdownItem.getWidth(),
                     markdownItem.getHeight());
             if (markdownItem.getLetter() != null) {
@@ -102,9 +102,7 @@ public class KeyboardActivity extends AppCompatActivity {
                         resourceCache.getDrawable(getKeyBackgroundForAction(markdownItem.getAction()))));
             }
         }
-
-
-        return null;
+        return builder.build();
     }
 
     private static int getKeyBackgroundForAction(String action) {

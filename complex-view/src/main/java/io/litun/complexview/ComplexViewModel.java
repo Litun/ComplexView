@@ -1,46 +1,32 @@
 package io.litun.complexview;
 
-import java.util.List;
+import android.content.Context;
 
-import io.litun.complexview.model.MarkdownElement;
+import io.litun.complexview.model.Markdown;
 
 /**
  * Created by Litun on 22.03.17.
  */
 public class ComplexViewModel {
-    public static final int OVERVIEW_LAYER = 0;
-    public static final int DETAILS_LAYER = 1;
+    private final Markdown markdown;
 
-    private final float width;
-    private final float height;
-    private final List<List<MarkdownElement>> layers;
-
-    public ComplexViewModel(Builder builder) {
-        this.width = builder.width;
-        this.height = builder.height;
-        this.layers = null;
+    public ComplexViewModel(Markdown markdown) {
+        this.markdown = markdown;
     }
 
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public List<List<MarkdownElement>> getLayers() {
-        return layers;
+    public Markdown getMarkdown() {
+        return markdown;
     }
 
     public static class Builder {
-        private float width;
-        private float height;
-        private List<MarkdownElement> elements;
+        private ResourceCache cache;
+        private MarkdownParser parser;
         private String fileName;
         private MarkdownProcessor processor;
 
-        public Builder() {
+        public Builder(Context context) {
+            cache = new ResourceCache(context);
+            parser = new MarkdownParser(context, cache);
         }
 
         public Builder setSourceFileName(String fileName) {
@@ -53,14 +39,10 @@ public class ComplexViewModel {
             return this;
         }
 
-        public Builder setSize(float width, float height) {
-            this.width = width;
-            this.height = height;
-            return this;
-        }
-
         public ComplexViewModel build() {
-            return new ComplexViewModel(this);
+            String stringFile = parser.readStringFile(fileName);
+            Markdown markdown = processor.process(stringFile, cache);
+            return new ComplexViewModel(markdown);
         }
     }
 }

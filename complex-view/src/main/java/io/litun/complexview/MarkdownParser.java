@@ -35,7 +35,7 @@ public class MarkdownParser {
         return stringBuilder.toString();
     }
 
-    private String readStringFile(String name) {
+    public String readStringFile(String name) {
         try {
             return readFile(name);
         } catch (IOException e) {
