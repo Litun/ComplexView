@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.litun.complexview">
+    package="io.litun.complexviewdemo">
 
     <application
         android:allowBackup="true"

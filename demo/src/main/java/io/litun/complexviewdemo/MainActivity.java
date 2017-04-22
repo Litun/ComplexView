@@ -1,4 +1,4 @@
-package io.litun.complexview;
+package io.litun.complexviewdemo;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package io.litun.complexview;
+package io.litun.complexviewdemo;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

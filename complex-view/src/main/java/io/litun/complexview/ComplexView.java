@@ -143,12 +143,14 @@ public class ComplexView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        List<List<MarkdownElement>> layers = viewModel.getLayers();
-        drawLayer(canvas, layers.get(State.OVERVIEW.getLayerNumber()), 1f);
-        if (state == State.DETAILED) {
-            drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), 1f);
-        } else if (state == State.TRANSITION) {
-            drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), transitionProgress);
+        if (viewModel != null) {
+            List<List<MarkdownElement>> layers = viewModel.getLayers();
+            drawLayer(canvas, layers.get(State.OVERVIEW.getLayerNumber()), 1f);
+            if (state == State.DETAILED) {
+                drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), 1f);
+            } else if (state == State.TRANSITION) {
+                drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), transitionProgress);
+            }
         }
     }
 

@@ -5,8 +5,27 @@
     android:layout_height="match_parent"
     tools:context="io.litun.complexview.KeyboardActivity">
 
-    <io.litun.complexview.ComplexView
+    <TextView
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/keyboard_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/colorPrimaryDark" />
+
+        <io.litun.complexview.ComplexView
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </FrameLayout>

@@ -1,4 +1,4 @@
-package io.litun.complexview;
+package io.litun.complexviewdemo;
 
 import org.junit.Test;
 
