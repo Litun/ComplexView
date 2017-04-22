@@ -16,7 +16,7 @@ import java.util.List;
 import io.litun.complexview.model.MarkdownDrawableElement;
 import io.litun.complexview.model.MarkdownElement;
 import io.litun.complexview.model.MarkdownFrame;
-import io.litun.complexview.model.MarkdownSeatElement;
+import io.litun.complexview.model.MarkdownClickableElement;
 import io.litun.complexview.model.MarkdownTextElement;
 
 /**
@@ -76,7 +76,7 @@ public class ComplexView extends View {
         state = State.DETAILED;
     }
 
-    private MarkdownSeatElement touchingSeat;
+    private MarkdownClickableElement touchingSeat;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -209,14 +209,14 @@ public class ComplexView extends View {
         fontRatio = testTextHeight / testTextWidth;
     }
 
-    private MarkdownSeatElement findSeatElement(float x, float y) {
+    private MarkdownClickableElement findSeatElement(float x, float y) {
         float markdownX = x / widthScale;
         float markdownY = y / heightScale;
         List<MarkdownElement> overviewElements = viewModel.getLayers().get(ComplexViewModel.OVERVIEW_LAYER);
         for (MarkdownElement element : overviewElements) {
-            if (element instanceof MarkdownSeatElement &&
+            if (element instanceof MarkdownClickableElement &&
                     insideFrame(markdownX, markdownY, element.getFrame())) {
-                return (MarkdownSeatElement) element;
+                return (MarkdownClickableElement) element;
             }
         }
         return null;
@@ -246,6 +246,6 @@ public class ComplexView extends View {
     }
 
     public interface OnSeatClickListener {
-        void onSeatClick(MarkdownSeatElement seatElement);
+        void onSeatClick(MarkdownClickableElement seatElement);
     }
 }

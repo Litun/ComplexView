@@ -1,21 +1,21 @@
 package io.litun.complexview.model;
 
-import android.graphics.drawable.Drawable;
-
+import android.support.annotation.DrawableRes;
 
 /**
  * Created by Litun on 29.03.2017.
  */
-
 public class MarkdownDrawableElement extends MarkdownElement {
-    private final Drawable drawable;
+    @DrawableRes
+    private final int drawableRes;
 
-    public MarkdownDrawableElement(MarkdownFrame frame, Drawable drawable) {
+    public MarkdownDrawableElement(MarkdownFrame frame, int drawableRes) {
         super(frame);
-        this.drawable = drawable;
+        this.drawableRes = drawableRes;
     }
 
-    public Drawable getDrawable() {
-        return drawable;
+    @DrawableRes
+    public int getDrawableRes() {
+        return drawableRes;
     }
 }
