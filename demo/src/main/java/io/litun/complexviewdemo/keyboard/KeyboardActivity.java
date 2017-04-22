@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.litun.complexview.ComplexView;
 import io.litun.complexview.ComplexViewModel;
 import io.litun.complexview.ResourceCache;
 import io.litun.complexview.model.Markdown;
-import io.litun.complexview.model.MarkdownElement;
+import io.litun.complexview.model.MarkdownDrawableElement;
+import io.litun.complexview.model.MarkdownFrame;
+import io.litun.complexview.model.MarkdownTextElement;
 import io.litun.complexviewdemo.R;
 
 /**
@@ -71,11 +71,55 @@ public class KeyboardActivity extends AppCompatActivity {
                         .setMarkdownProcessor(KeyboardActivity::makeMarkdown)
                         .build();
             }
+
+            @Override
+            protected void onPostExecute(ComplexViewModel complexViewModel) {
+                keyboard.setData(complexViewModel);
+            }
         }.execute();
     }
 
     private static Markdown makeMarkdown(String object, ResourceCache resourceCache) {
         KeyboardMarkdownModel keyboardMarkdownModel = new Gson().fromJson(object, KeyboardMarkdownModel.class);
+        float x = keyboardMarkdownModel.getX();
+        float y = keyboardMarkdownModel.getY();
+        Markdown.Builder builder = new Markdown.Builder()
+                .setSize(keyboardMarkdownModel.getWidth() - x,
+                        keyboardMarkdownModel.getHeight() - y);
+        for (KeyboardMarkdownItem markdownItem : keyboardMarkdownModel.getItems()) {
+            MarkdownFrame frame = new MarkdownFrame(
+                    markdownItem.getX(),
+                    markdownItem.getY(),
+                    markdownItem.getWidth(),
+                    markdownItem.getHeight());
+            if (markdownItem.getLetter() != null) {
+                builder.addElement(0, new MarkdownDrawableElement(frame,
+                        resourceCache.getDrawable(R.drawable.keyboard_letter_key)));
+                builder.addElement(1, new MarkdownTextElement(frame,
+                        markdownItem.getLetter()));
+            } else if (markdownItem.getAction() != null) {
+                builder.addElement(0, new MarkdownDrawableElement(frame,
+                        resourceCache.getDrawable(getKeyBackgroundForAction(markdownItem.getAction()))));
+            }
+        }
+
+
         return null;
+    }
+
+    private static int getKeyBackgroundForAction(String action) {
+        switch (action) {
+            case "shift":
+            case "enter":
+            case "123":
+            case "backspace":
+                return R.drawable.keyboard_action_key;
+            case "dot":
+            case "coma":
+            case "smile":
+                return R.drawable.keyboard_extra_key;
+            default:
+                return R.drawable.keyboard_letter_key;
+        }
     }
 }
