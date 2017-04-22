@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.litun.complexviewdemo.keyboard.KeyboardActivity;
+import io.litun.complexviewdemo.trainschemes.TrainSchemesActivity;
 
 public class MainActivity extends AppCompatActivity {
 

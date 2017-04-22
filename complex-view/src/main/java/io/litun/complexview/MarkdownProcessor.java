@@ -1,15 +1,11 @@
 package io.litun.complexview;
 
-import org.json.JSONObject;
-
-import java.util.List;
-
-import io.litun.complexview.model.MarkdownElement;
+import io.litun.complexview.model.Markdown;
 
 /**
  * Created by Litun on 22.04.2017.
  */
 
 public interface MarkdownProcessor {
-    List<MarkdownElement> process(JSONObject object, ResourceCache resourceCache);
+    Markdown process(String object, ResourceCache resourceCache);
 }

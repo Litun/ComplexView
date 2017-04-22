@@ -1,5 +1,6 @@
-package io.litun.complexviewdemo;
+package io.litun.complexviewdemo.keyboard;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -7,9 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.litun.complexview.ComplexView;
+import io.litun.complexview.ComplexViewModel;
+import io.litun.complexview.ResourceCache;
+import io.litun.complexview.model.Markdown;
+import io.litun.complexview.model.MarkdownElement;
+import io.litun.complexviewdemo.R;
 
 /**
  * Created by Litun on 21.04.2017.
@@ -52,5 +62,20 @@ public class KeyboardActivity extends AppCompatActivity {
                 }
             }
         });
+        new AsyncTask<Void, Void, ComplexViewModel>() {
+
+            @Override
+            protected ComplexViewModel doInBackground(Void... params) {
+                return new ComplexViewModel.Builder()
+                        .setSourceFileName("keyboard_markdown.json")
+                        .setMarkdownProcessor(KeyboardActivity::makeMarkdown)
+                        .build();
+            }
+        }.execute();
+    }
+
+    private static Markdown makeMarkdown(String object, ResourceCache resourceCache) {
+        KeyboardMarkdownModel keyboardMarkdownModel = new Gson().fromJson(object, KeyboardMarkdownModel.class);
+        return null;
     }
 }

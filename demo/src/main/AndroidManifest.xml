@@ -16,8 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TrainSchemesActivity"/>
-        <activity android:name=".KeyboardActivity"/>
+        <activity android:name=".trainschemes.TrainSchemesActivity"/>
+        <activity android:name=".keyboard.KeyboardActivity"/>
     </application>
 
 </manifest>

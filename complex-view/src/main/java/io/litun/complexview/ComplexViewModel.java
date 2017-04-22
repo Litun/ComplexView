@@ -1,7 +1,5 @@
 package io.litun.complexview;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.litun.complexview.model.MarkdownElement;
@@ -40,12 +38,18 @@ public class ComplexViewModel {
         private float height;
         private List<MarkdownElement> elements;
         private String fileName;
+        private MarkdownProcessor processor;
 
         public Builder() {
         }
 
         public Builder setSourceFileName(String fileName) {
             this.fileName = fileName;
+            return this;
+        }
+
+        public Builder setMarkdownProcessor(MarkdownProcessor processor) {
+            this.processor = processor;
             return this;
         }
 

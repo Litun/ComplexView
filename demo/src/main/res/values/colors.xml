@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="keyboard_background">#E5E5E5</color>
+    <color name="keyboard_letter_key">#FFFFFF</color>
+    <color name="keyboard_action_key">#B2B0B1</color>
+    <color name="keyboard_extra_key">#A3A0A2</color>
 </resources>
