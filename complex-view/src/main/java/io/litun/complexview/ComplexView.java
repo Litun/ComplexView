@@ -3,6 +3,7 @@ package io.litun.complexview;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ public class ComplexView extends View {
 
     private final TextPaint textPaint = new TextPaint();
     private final Rect textBounds = new Rect();
+    private final Paint paint = new Paint();
 
     private OnSeatClickListener seatClickListener;
     private ComplexViewModel viewModel;
@@ -138,6 +140,7 @@ public class ComplexView extends View {
         if (viewModel != null) {
             widthScale = getWidth() / viewModel.getMarkup().getWidth();
             heightScale = getHeight() / viewModel.getMarkup().getHeight();
+//            viewModel.onLayout(getWidth(), getHeight());
         }
     }
 
@@ -172,10 +175,29 @@ public class ComplexView extends View {
     }
 
     private void drawInFrame(Canvas canvas, Drawable drawable, MarkupFrame frame, float alpha) {
-        float leftBound = frame.getX();
-        float topBound = frame.getY();
-        float rightBound = leftBound + frame.getWidth();
-        float bottomBound = topBound + frame.getHeight();
+        int drawableHeight = drawable.getIntrinsicHeight();
+        int drawableWidth = drawable.getIntrinsicWidth();
+
+        float x = frame.getX();
+        float y = frame.getY();
+        float w = frame.getWidth();
+        float h = frame.getHeight();
+        if (drawableHeight != -1 && drawableWidth != -1) {
+            if (frame.getHeight() / frame.getWidth() > (float) drawableHeight / drawableWidth) {
+                float newHeight = frame.getWidth() / drawableWidth * drawableHeight;
+                y += (frame.getHeight() - newHeight) / 2;
+                h = newHeight;
+            } else {
+                float newWidth = frame.getHeight() / drawableHeight * drawableWidth;
+                x += (frame.getWidth() - newWidth) / 2;
+                w = newWidth;
+            }
+        }
+
+        float leftBound = x;
+        float topBound = y;
+        float rightBound = leftBound + w;
+        float bottomBound = topBound + h;
 
         drawable.setBounds((int) (leftBound * widthScale),
                 (int) (topBound * heightScale),
@@ -183,6 +205,7 @@ public class ComplexView extends View {
                 (int) (bottomBound * heightScale));
         drawable.setAlpha((int) (MAX_ALPHA * alpha));
         drawable.draw(canvas);
+
     }
 
     private void drawInFrame(Canvas canvas, String text, MarkupFrame frame, float alpha) {
@@ -194,13 +217,21 @@ public class ComplexView extends View {
         }
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
         textPaint.setAlpha((int) (MAX_ALPHA * alpha));
+        float x = (frame.getX() + frame.getWidth() / 2) * widthScale - textBounds.width() / 2f;
+        float y = (frame.getY() + frame.getHeight() / 2) * heightScale + textBounds.height() / 2f - textBounds.bottom;
+        canvas.drawRect(x + textBounds.left,
+                y - textBounds.height() + textBounds.bottom,
+                x + textBounds.width() + textBounds.left,
+                y + textBounds.bottom,
+                paint);
         canvas.drawText(text,
-                (frame.getX() + frame.getWidth() / 2) * widthScale - (textBounds.right + textBounds.left) / 2f,
-                (frame.getY() + frame.getHeight() / 2) * heightScale + textBounds.height() / 2f + textBounds.bottom,
+                x,
+                y,
                 textPaint);
     }
 
     private void init(Context context) {
+        paint.setColor(Color.LTGRAY);
         textPaint.setAntiAlias(true);
         // TODO: refactor text color and font source
         textPaint.setColor(Color.BLACK);
