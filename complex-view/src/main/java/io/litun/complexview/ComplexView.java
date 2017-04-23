@@ -219,15 +219,15 @@ public class ComplexView extends View {
         textPaint.setAlpha((int) (MAX_ALPHA * alpha));
         float x = (frame.getX() + frame.getWidth() / 2) * widthScale - textBounds.width() / 2f - textBounds.left;
         float y = (frame.getY() + frame.getHeight() / 2) * heightScale - textBounds.top / 2f;
-        canvas.drawRect(x + textBounds.left,
-                y - textBounds.height() + textBounds.bottom,
-                x + textBounds.width() + textBounds.left,
-                y + textBounds.bottom,
-                paint);
-//        canvas.drawText(text,
-//                x,
-//                y,
-//                textPaint);
+//        canvas.drawRect(x + textBounds.left,
+//                y - textBounds.height() + textBounds.bottom,
+//                x + textBounds.width() + textBounds.left,
+//                y + textBounds.bottom,
+//                paint);
+        canvas.drawText(text,
+                x,
+                y,
+                textPaint);
     }
 
     private void init(Context context) {
