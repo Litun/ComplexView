@@ -3,21 +3,21 @@ package io.litun.complexview;
 import android.content.Context;
 
 import io.litun.complexview.model.DynamicLayout;
-import io.litun.complexview.model.Markdown;
+import io.litun.complexview.model.Markup;
 
 /**
  * Created by Litun on 22.03.17.
  */
 public class ComplexViewModel {
-    private Markdown markdown;
+    private Markup markup;
     private final DynamicLayout layout = new DynamicLayout();
 
-    public ComplexViewModel(Markdown markdown) {
-        this.markdown = markdown;
+    public ComplexViewModel(Markup markup) {
+        this.markup = markup;
     }
 
-    public Markdown getMarkdown() {
-        return markdown;
+    public Markup getMarkup() {
+        return markup;
     }
 
     public DynamicLayout getLayout() {
@@ -26,13 +26,13 @@ public class ComplexViewModel {
 
     public static class Builder {
         private ResourceCache cache;
-        private MarkdownParser parser;
+        private MarkupParser parser;
         private String fileName;
-        private MarkdownProcessor processor;
+        private MarkupProcessor processor;
 
         public Builder(Context context) {
             cache = new ResourceCache(context);
-            parser = new MarkdownParser(context, cache);
+            parser = new MarkupParser(context, cache);
         }
 
         public Builder setSourceFileName(String fileName) {
@@ -40,15 +40,15 @@ public class ComplexViewModel {
             return this;
         }
 
-        public Builder setMarkdownProcessor(MarkdownProcessor processor) {
+        public Builder setMarkupProcessor(MarkupProcessor processor) {
             this.processor = processor;
             return this;
         }
 
         public ComplexViewModel build() {
             String stringFile = parser.readStringFile(fileName);
-            Markdown markdown = processor.process(stringFile, cache);
-            return new ComplexViewModel(markdown);
+            Markup markup = processor.process(stringFile, cache);
+            return new ComplexViewModel(markup);
         }
     }
 }

@@ -5,10 +5,10 @@ import android.graphics.drawable.Drawable;
 /**
  * Created by Litun on 29.03.2017.
  */
-public class MarkdownDrawableElement extends MarkdownElement {
+public class MarkupDrawableElement extends MarkupElement {
     private final Drawable drawable;
 
-    public MarkdownDrawableElement(MarkdownFrame frame, Drawable drawable) {
+    public MarkupDrawableElement(MarkupFrame frame, Drawable drawable) {
         super(frame);
         this.drawable = drawable;
     }

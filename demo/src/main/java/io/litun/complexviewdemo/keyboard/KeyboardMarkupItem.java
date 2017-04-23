@@ -4,7 +4,7 @@ package io.litun.complexviewdemo.keyboard;
  * Created by Litun on 22.04.2017.
  */
 
-public class KeyboardMarkdownItem {
+public class KeyboardMarkupItem {
     private float x;
     private float y;
     private float width;

@@ -1,17 +1,20 @@
-package io.litun.complexviewdemo.keyboard;
-
-import java.util.List;
+package io.litun.complexview.model;
 
 /**
- * Created by Litun on 22.04.2017.
+ * Created by Litun on 13.04.2017.
  */
-
-public class KeyboardMarkdownModel {
+public class MarkupFrame {
     private float x;
     private float y;
     private float width;
     private float height;
-    private List<KeyboardMarkdownItem> items;
+
+    public MarkupFrame(float x, float y, float width, float height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
 
     public float getX() {
         return x;
@@ -27,9 +30,5 @@ public class KeyboardMarkdownModel {
 
     public float getHeight() {
         return height;
-    }
-
-    public List<KeyboardMarkdownItem> getItems() {
-        return items;
     }
 }

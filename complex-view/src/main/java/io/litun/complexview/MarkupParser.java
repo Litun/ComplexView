@@ -12,12 +12,12 @@ import java.io.InputStreamReader;
  * Created by Litun on 21.04.2017.
  */
 
-public class MarkdownParser {
+public class MarkupParser {
 
     private final Resources resources;
     private final ResourceCache resourceCache;
 
-    public MarkdownParser(Context context, ResourceCache resourceCache) {
+    public MarkupParser(Context context, ResourceCache resourceCache) {
         this.resources = context.getResources();
         this.resourceCache = resourceCache;
     }

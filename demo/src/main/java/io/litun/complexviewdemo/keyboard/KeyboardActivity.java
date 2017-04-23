@@ -15,10 +15,10 @@ import butterknife.ButterKnife;
 import io.litun.complexview.ComplexView;
 import io.litun.complexview.ComplexViewModel;
 import io.litun.complexview.ResourceCache;
-import io.litun.complexview.model.Markdown;
-import io.litun.complexview.model.MarkdownDrawableElement;
-import io.litun.complexview.model.MarkdownFrame;
-import io.litun.complexview.model.MarkdownTextElement;
+import io.litun.complexview.model.Markup;
+import io.litun.complexview.model.MarkupDrawableElement;
+import io.litun.complexview.model.MarkupFrame;
+import io.litun.complexview.model.MarkupTextElement;
 import io.litun.complexviewdemo.R;
 
 /**
@@ -67,8 +67,8 @@ public class KeyboardActivity extends AppCompatActivity {
             @Override
             protected ComplexViewModel doInBackground(Void... params) {
                 return new ComplexViewModel.Builder(KeyboardActivity.this)
-                        .setSourceFileName("keyboard_markdown.json")
-                        .setMarkdownProcessor(KeyboardActivity::makeMarkdown)
+                        .setSourceFileName("keyboard_markup.json")
+                        .setMarkupProcessor(KeyboardActivity::makeMarkup)
                         .build();
             }
 
@@ -79,27 +79,27 @@ public class KeyboardActivity extends AppCompatActivity {
         }.execute();
     }
 
-    private static Markdown makeMarkdown(String object, ResourceCache resourceCache) {
-        KeyboardMarkdownModel keyboardMarkdownModel = new Gson().fromJson(object, KeyboardMarkdownModel.class);
-        float x = keyboardMarkdownModel.getX();
-        float y = keyboardMarkdownModel.getY();
-        Markdown.Builder builder = new Markdown.Builder()
-                .setSize(keyboardMarkdownModel.getWidth(),
-                        keyboardMarkdownModel.getHeight());
-        for (KeyboardMarkdownItem markdownItem : keyboardMarkdownModel.getItems()) {
-            MarkdownFrame frame = new MarkdownFrame(
-                    markdownItem.getX() - x,
-                    markdownItem.getY() - y,
-                    markdownItem.getWidth(),
-                    markdownItem.getHeight());
-            if (markdownItem.getLetter() != null) {
-                builder.addElement(0, new MarkdownDrawableElement(frame,
+    private static Markup makeMarkup(String object, ResourceCache resourceCache) {
+        KeyboardMarkupModel keyboardMarkupModel = new Gson().fromJson(object, KeyboardMarkupModel.class);
+        float x = keyboardMarkupModel.getX();
+        float y = keyboardMarkupModel.getY();
+        Markup.Builder builder = new Markup.Builder()
+                .setSize(keyboardMarkupModel.getWidth(),
+                        keyboardMarkupModel.getHeight());
+        for (KeyboardMarkupItem markupItem : keyboardMarkupModel.getItems()) {
+            MarkupFrame frame = new MarkupFrame(
+                    markupItem.getX() - x,
+                    markupItem.getY() - y,
+                    markupItem.getWidth(),
+                    markupItem.getHeight());
+            if (markupItem.getLetter() != null) {
+                builder.addElement(0, new MarkupDrawableElement(frame,
                         resourceCache.getDrawable(R.drawable.keyboard_letter_key)));
-                builder.addElement(1, new MarkdownTextElement(frame,
-                        markdownItem.getLetter()));
-            } else if (markdownItem.getAction() != null) {
-                builder.addElement(0, new MarkdownDrawableElement(frame,
-                        resourceCache.getDrawable(getKeyBackgroundForAction(markdownItem.getAction()))));
+                builder.addElement(1, new MarkupTextElement(frame,
+                        markupItem.getLetter()));
+            } else if (markupItem.getAction() != null) {
+                builder.addElement(0, new MarkupDrawableElement(frame,
+                        resourceCache.getDrawable(getKeyBackgroundForAction(markupItem.getAction()))));
             }
         }
         return builder.build();

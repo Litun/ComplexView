@@ -13,11 +13,11 @@ import android.view.View;
 
 import java.util.List;
 
-import io.litun.complexview.model.MarkdownDrawableElement;
-import io.litun.complexview.model.MarkdownElement;
-import io.litun.complexview.model.MarkdownFrame;
-import io.litun.complexview.model.MarkdownClickableElement;
-import io.litun.complexview.model.MarkdownTextElement;
+import io.litun.complexview.model.MarkupDrawableElement;
+import io.litun.complexview.model.MarkupElement;
+import io.litun.complexview.model.MarkupFrame;
+import io.litun.complexview.model.MarkupClickableElement;
+import io.litun.complexview.model.MarkupTextElement;
 
 /**
  * Created by Litun on 17.03.17.
@@ -76,7 +76,7 @@ public class ComplexView extends View {
         state = State.DETAILED;
     }
 
-    private MarkdownClickableElement touchingSeat;
+    private MarkupClickableElement touchingSeat;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -118,7 +118,7 @@ public class ComplexView extends View {
         }
 
         float ratio = viewModel != null ?
-                viewModel.getMarkdown().getHeight() / viewModel.getMarkdown().getWidth() :
+                viewModel.getMarkup().getHeight() / viewModel.getMarkup().getWidth() :
                 DEFAULT_RATIO;
 
         height = (int) (width * ratio);
@@ -136,15 +136,15 @@ public class ComplexView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (viewModel != null) {
-            widthScale = getWidth() / viewModel.getMarkdown().getWidth();
-            heightScale = getHeight() / viewModel.getMarkdown().getHeight();
+            widthScale = getWidth() / viewModel.getMarkup().getWidth();
+            heightScale = getHeight() / viewModel.getMarkup().getHeight();
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (viewModel != null) {
-            List<List<MarkdownElement>> layers = viewModel.getMarkdown().getLayers();
+            List<List<MarkupElement>> layers = viewModel.getMarkup().getLayers();
             drawLayer(canvas, layers.get(State.OVERVIEW.getLayerNumber()), 1f);
             if (state == State.DETAILED) {
                 drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), 1f);
@@ -154,24 +154,24 @@ public class ComplexView extends View {
         }
     }
 
-    private void drawLayer(Canvas canvas, List<MarkdownElement> layerElements, float alpha) {
+    private void drawLayer(Canvas canvas, List<MarkupElement> layerElements, float alpha) {
         for (int j = 0; j < layerElements.size(); j++) {
-            MarkdownElement element = layerElements.get(j);
+            MarkupElement element = layerElements.get(j);
             drawElement(canvas, element, alpha);
         }
     }
 
-    private void drawElement(Canvas canvas, MarkdownElement element, float alpha) {
-        if (element instanceof MarkdownDrawableElement) {
-            drawInFrame(canvas, ((MarkdownDrawableElement) element).getDrawable(),
+    private void drawElement(Canvas canvas, MarkupElement element, float alpha) {
+        if (element instanceof MarkupDrawableElement) {
+            drawInFrame(canvas, ((MarkupDrawableElement) element).getDrawable(),
                     element.getFrame(), alpha);
-        } else if (element instanceof MarkdownTextElement) {
-            drawInFrame(canvas, ((MarkdownTextElement) element).getText(), element.getFrame(),
+        } else if (element instanceof MarkupTextElement) {
+            drawInFrame(canvas, ((MarkupTextElement) element).getText(), element.getFrame(),
                     alpha);
         }
     }
 
-    private void drawInFrame(Canvas canvas, Drawable drawable, MarkdownFrame frame, float alpha) {
+    private void drawInFrame(Canvas canvas, Drawable drawable, MarkupFrame frame, float alpha) {
         float leftBound = frame.getX();
         float topBound = frame.getY();
         float rightBound = leftBound + frame.getWidth();
@@ -185,7 +185,7 @@ public class ComplexView extends View {
         drawable.draw(canvas);
     }
 
-    private void drawInFrame(Canvas canvas, String text, MarkdownFrame frame, float alpha) {
+    private void drawInFrame(Canvas canvas, String text, MarkupFrame frame, float alpha) {
         // inscribe text by height
         if (fontRatio / text.length() > frame.getHeight() / frame.getWidth()) {
             textPaint.setTextSize(frame.getHeight() * heightScale);
@@ -211,24 +211,24 @@ public class ComplexView extends View {
         fontRatio = testTextHeight / testTextWidth;
     }
 
-    private MarkdownClickableElement findSeatElement(float x, float y) {
-        float markdownX = x / widthScale;
-        float markdownY = y / heightScale;
-        List<MarkdownElement> overviewElements = viewModel.getMarkdown().getLayers().get(0);
-        for (MarkdownElement element : overviewElements) {
-            if (element instanceof MarkdownClickableElement &&
-                    insideFrame(markdownX, markdownY, element.getFrame())) {
-                return (MarkdownClickableElement) element;
+    private MarkupClickableElement findSeatElement(float x, float y) {
+        float markupX = x / widthScale;
+        float markupY = y / heightScale;
+        List<MarkupElement> overviewElements = viewModel.getMarkup().getLayers().get(0);
+        for (MarkupElement element : overviewElements) {
+            if (element instanceof MarkupClickableElement &&
+                    insideFrame(markupX, markupY, element.getFrame())) {
+                return (MarkupClickableElement) element;
             }
         }
         return null;
     }
 
-    private boolean insideFrame(float markdownX, float markdownY, MarkdownFrame frame) {
-        return markdownX >= frame.getX() &&
-                markdownX <= frame.getX() + frame.getWidth() &&
-                markdownY > frame.getY() &&
-                markdownY <= frame.getY() + frame.getHeight();
+    private boolean insideFrame(float markupX, float markupY, MarkupFrame frame) {
+        return markupX >= frame.getX() &&
+                markupX <= frame.getX() + frame.getWidth() &&
+                markupY > frame.getY() &&
+                markupY <= frame.getY() + frame.getHeight();
     }
 
     public enum State {
@@ -248,6 +248,6 @@ public class ComplexView extends View {
     }
 
     public interface OnSeatClickListener {
-        void onSeatClick(MarkdownClickableElement seatElement);
+        void onSeatClick(MarkupClickableElement seatElement);
     }
 }

@@ -8,7 +8,7 @@ import android.support.annotation.ColorInt;
  * Created by Litun on 29.03.2017.
  */
 
-public class MarkdownClickableElement extends MarkdownDrawableElement {
+public class MarkupClickableElement extends MarkupDrawableElement {
     @ColorInt
     private final int defaultColor;
     @ColorInt
@@ -16,8 +16,8 @@ public class MarkdownClickableElement extends MarkdownDrawableElement {
     private final int number;
     private boolean selected;
 
-    public MarkdownClickableElement(MarkdownFrame frame, Drawable drawable,
-                                    @ColorInt int seatColor, @ColorInt int selectColor, int number) {
+    public MarkupClickableElement(MarkupFrame frame, Drawable drawable,
+                                  @ColorInt int seatColor, @ColorInt int selectColor, int number) {
         super(frame, drawable);
         this.defaultColor = seatColor;
         this.selectColor = selectColor;
