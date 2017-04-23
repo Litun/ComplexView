@@ -2,13 +2,15 @@ package io.litun.complexview;
 
 import android.content.Context;
 
+import io.litun.complexview.model.DynamicLayout;
 import io.litun.complexview.model.Markdown;
 
 /**
  * Created by Litun on 22.03.17.
  */
 public class ComplexViewModel {
-    private final Markdown markdown;
+    private Markdown markdown;
+    private final DynamicLayout layout = new DynamicLayout();
 
     public ComplexViewModel(Markdown markdown) {
         this.markdown = markdown;
@@ -16,6 +18,10 @@ public class ComplexViewModel {
 
     public Markdown getMarkdown() {
         return markdown;
+    }
+
+    public DynamicLayout getLayout() {
+        return layout;
     }
 
     public static class Builder {
