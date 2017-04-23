@@ -17,6 +17,7 @@ import io.litun.complexview.ComplexViewModel;
 import io.litun.complexview.ResourceCache;
 import io.litun.complexview.model.Markup;
 import io.litun.complexview.model.MarkupDrawableElement;
+import io.litun.complexview.model.MarkupElement;
 import io.litun.complexview.model.MarkupFrame;
 import io.litun.complexview.model.MarkupTextElement;
 import io.litun.complexviewdemo.R;
@@ -95,14 +96,50 @@ public class KeyboardActivity extends AppCompatActivity {
             if (markupItem.getLetter() != null) {
                 builder.addElement(0, new MarkupDrawableElement(frame,
                         resourceCache.getDrawable(R.drawable.keyboard_letter_key)));
-                builder.addElement(1, new MarkupTextElement(frame,
+                builder.addElement(1, new MarkupTextElement(createSmallFrame(frame),
                         markupItem.getLetter()));
             } else if (markupItem.getAction() != null) {
                 builder.addElement(0, new MarkupDrawableElement(frame,
                         resourceCache.getDrawable(getKeyBackgroundForAction(markupItem.getAction()))));
+                builder.addElement(1, createElementForAction(markupItem.getAction(), frame, resourceCache));
             }
         }
         return builder.build();
+    }
+
+    private static MarkupElement createElementForAction(String action, MarkupFrame frame,
+                                                        ResourceCache resourceCache) {
+        switch (action) {
+            case "dot":
+                return new MarkupTextElement(createSmallFrame(frame), ".");
+            case "coma":
+                return new MarkupTextElement(createSmallFrame(frame), ",");
+            case "123":
+                return new MarkupTextElement(createSmallFrame(frame), "&123");
+
+            case "shift":
+                return new MarkupDrawableElement(createSmallFrame(frame),
+                        resourceCache.getDrawable(R.drawable.ic_keyboard_up));
+            case "enter":
+                return new MarkupDrawableElement(createSmallFrame(frame),
+                        resourceCache.getDrawable(R.drawable.ic_keyboard_enter));
+            case "backspace":
+                return new MarkupDrawableElement(createSmallFrame(frame),
+                        resourceCache.getDrawable(R.drawable.ic_keyboard_backspace));
+            case "smile":
+                return new MarkupDrawableElement(createSmallFrame(frame),
+                        resourceCache.getDrawable(R.drawable.ic_keyboard_smile));
+            default:
+                return null;
+        }
+    }
+
+    private static MarkupFrame createSmallFrame(MarkupFrame frame) {
+        return new MarkupFrame(frame.getX() + frame.getWidth() / 4,
+                frame.getY() + frame.getHeight() / 4,
+                frame.getWidth() / 2,
+                frame.getHeight() / 2);
+
     }
 
     private static int getKeyBackgroundForAction(String action) {
