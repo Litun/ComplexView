@@ -210,15 +210,17 @@ public class ComplexView extends View {
 
     private void drawInFrame(Canvas canvas, String text, MarkupFrame frame, float alpha) {
         // inscribe text by height
+        float textSize;
         if (fontRatio / text.length() > frame.getHeight() / frame.getWidth()) {
-            textPaint.setTextSize(frame.getHeight() * heightScale);
+            textSize = frame.getHeight() * heightScale;
         } else { // inscribe text by width
-            textPaint.setTextSize(frame.getWidth() * widthScale / text.length() * fontRatio);
+            textSize = frame.getWidth() * widthScale / text.length() * fontRatio;
         }
+        textPaint.setTextSize(textSize);
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
         textPaint.setAlpha((int) (MAX_ALPHA * alpha));
         float x = (frame.getX() + frame.getWidth() / 2) * widthScale - textBounds.width() / 2f - textBounds.left;
-        float y = (frame.getY() + frame.getHeight() / 2) * heightScale - textBounds.top / 2f;
+        float y = (frame.getY() + frame.getHeight() / 2) * heightScale + textSize / 2f;
 //        canvas.drawRect(x + textBounds.left,
 //                y - textBounds.height() + textBounds.bottom,
 //                x + textBounds.width() + textBounds.left,

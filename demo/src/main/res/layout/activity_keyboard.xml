@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.litun.complexview.KeyboardActivity">
+    tools:context="io.litun.complexviewdemo.keyboard.KeyboardActivity">
 
     <TextView
         android:id="@+id/input"
@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/keyboard_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:layout_gravity="bottom"
         android:orientation="vertical">
 
