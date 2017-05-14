@@ -113,22 +113,29 @@ public class ComplexView extends View {
         int width;
         int height;
 
+        float ratio = viewModel != null ?
+                viewModel.getMarkup().getHeight() / viewModel.getMarkup().getWidth() :
+                DEFAULT_RATIO;
+
         if (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST) {
             width = widthSize;
         } else {
             width = DEFAULT_WIDTH_PIXELS;
         }
 
-        float ratio = viewModel != null ?
-                viewModel.getMarkup().getHeight() / viewModel.getMarkup().getWidth() :
-                DEFAULT_RATIO;
-
-        height = (int) (width * ratio);
-
-        if (heightMode == MeasureSpec.AT_MOST && height > heightSize ||
-                heightMode == MeasureSpec.EXACTLY) {
+        if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            height = (int) (width * ratio);
+            if (height > heightSize) {
+                height = heightSize;
+            }
+        } else {
+            height = (int) (width * ratio);
+        }
 
+        if ((height / width < ratio) && (widthMode == MeasureSpec.UNSPECIFIED || widthMode == MeasureSpec.AT_MOST)) {
+            width = (int) (height / ratio);
         }
 
         setMeasuredDimension(width, height);
