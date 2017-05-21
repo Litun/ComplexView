@@ -18,6 +18,22 @@ public class Markup2 {
         this.frames = builder.frames;
     }
 
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public List<MarkupFrame2> getFrames() {
+        return frames;
+    }
+
+    public ScaleMode getScaleMode() {
+        return scaleMode;
+    }
+
     public void setScaleMode(ScaleMode scaleMode) {
         this.scaleMode = scaleMode;
     }

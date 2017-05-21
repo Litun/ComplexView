@@ -1,5 +1,6 @@
 package io.litun.complexviewdemo.keyboard;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,16 @@ import io.litun.complexview.ComplexView;
 import io.litun.complexview.ComplexViewModel;
 import io.litun.complexview.ResourceCache;
 import io.litun.complexview.model.Markup;
+import io.litun.complexview.model.Markup2;
 import io.litun.complexview.model.MarkupDrawableElement;
+import io.litun.complexview.model.MarkupDrawableElement2;
 import io.litun.complexview.model.MarkupElement;
+import io.litun.complexview.model.MarkupElement2;
 import io.litun.complexview.model.MarkupFrame;
+import io.litun.complexview.model.MarkupFrame2;
 import io.litun.complexview.model.MarkupTextElement;
+import io.litun.complexview.model.MarkupTextElement2;
+import io.litun.complexview.model.ScaleMode;
 import io.litun.complexviewdemo.R;
 
 /**
@@ -27,6 +34,8 @@ import io.litun.complexviewdemo.R;
  */
 
 public class KeyboardActivity extends AppCompatActivity {
+
+    public static final float QUARTER = 0.25f;
 
     @BindView(R.id.input)
     TextView input;
@@ -80,66 +89,80 @@ public class KeyboardActivity extends AppCompatActivity {
         }.execute();
     }
 
-    private static Markup makeMarkup(String object, ResourceCache resourceCache) {
+    private static Markup2 makeMarkup(String object, ResourceCache resourceCache) {
         KeyboardMarkupModel keyboardMarkupModel = new Gson().fromJson(object, KeyboardMarkupModel.class);
         float x = keyboardMarkupModel.getX();
         float y = keyboardMarkupModel.getY();
-        Markup.Builder builder = new Markup.Builder()
+        Markup2.Builder builder = new Markup2.Builder()
                 .setSize(keyboardMarkupModel.getWidth(),
                         keyboardMarkupModel.getHeight());
         for (KeyboardMarkupItem markupItem : keyboardMarkupModel.getItems()) {
-            MarkupFrame frame = new MarkupFrame(
+            MarkupFrame2.Builder frameBuilder = new MarkupFrame2.Builder(
                     markupItem.getX() - x,
                     markupItem.getY() - y,
                     markupItem.getWidth(),
                     markupItem.getHeight());
             if (markupItem.getLetter() != null) {
-                builder.addElement(0, new MarkupDrawableElement(frame,
-                        resourceCache.getDrawable(R.drawable.keyboard_letter_key)));
-                builder.addElement(1, new MarkupTextElement(createSmallFrame(frame),
-                        markupItem.getLetter()));
+                frameBuilder.addElement(new MarkupDrawableElement2(0,
+                        resourceCache.getDrawable(R.drawable.keyboard_letter_key),
+                        null));
+                frameBuilder.addElement(createLetterElement(1, markupItem.getLetter()));
             } else if (markupItem.getAction() != null) {
-                builder.addElement(0, new MarkupDrawableElement(frame,
-                        resourceCache.getDrawable(getKeyBackgroundForAction(markupItem.getAction()))));
-                builder.addElement(1, createElementForAction(markupItem.getAction(), frame, resourceCache));
+                frameBuilder.addElement(new MarkupDrawableElement2(0,
+                        resourceCache.getDrawable(getKeyBackgroundForAction(markupItem.getAction())),
+                        null));
+                frameBuilder.addElement(createElementForAction(markupItem.getAction(), 1, resourceCache));
             }
+            builder.addFrame(frameBuilder.build());
         }
         return builder.build();
     }
 
-    private static MarkupElement createElementForAction(String action, MarkupFrame frame,
-                                                        ResourceCache resourceCache) {
+    private static MarkupElement2 createLetterElement(int layer, String letter) {
+        return new MarkupTextElement2(QUARTER, QUARTER, QUARTER, QUARTER, layer, ScaleMode.INSCRIBE, letter);
+    }
+
+    private static MarkupElement2 createElementForAction(String action, int layer,
+                                                         ResourceCache resourceCache) {
+        MarkupElement2 result = null;
+        String s = null;
+        Drawable d = null;
         switch (action) {
             case "dot":
-                return new MarkupTextElement(createSmallFrame(frame), ".");
+                s = ".";
+                break;
             case "coma":
-                return new MarkupTextElement(createSmallFrame(frame), ",");
+                s = ",";
+                break;
             case "123":
-                return new MarkupTextElement(createSmallFrame(frame), "&123");
+                s = "&123";
+                break;
 
             case "shift":
-                return new MarkupDrawableElement(createSmallFrame(frame),
-                        resourceCache.getDrawable(R.drawable.ic_keyboard_up));
+                d = resourceCache.getDrawable(R.drawable.ic_keyboard_up);
+                break;
             case "enter":
-                return new MarkupDrawableElement(createSmallFrame(frame),
-                        resourceCache.getDrawable(R.drawable.ic_keyboard_enter));
+                d = resourceCache.getDrawable(R.drawable.ic_keyboard_enter);
+                break;
             case "backspace":
-                return new MarkupDrawableElement(createSmallFrame(frame),
-                        resourceCache.getDrawable(R.drawable.ic_keyboard_backspace));
+                d = resourceCache.getDrawable(R.drawable.ic_keyboard_backspace);
+                break;
             case "smile":
-                return new MarkupDrawableElement(createSmallFrame(frame),
-                        resourceCache.getDrawable(R.drawable.ic_keyboard_smile));
+                d = resourceCache.getDrawable(R.drawable.ic_keyboard_smile);
+                break;
             default:
                 return null;
         }
-    }
 
-    private static MarkupFrame createSmallFrame(MarkupFrame frame) {
-        return new MarkupFrame(frame.getX() + frame.getWidth() / 4,
-                frame.getY() + frame.getHeight() / 4,
-                frame.getWidth() / 2,
-                frame.getHeight() / 2);
+        if (s != null) {
+            result = new MarkupTextElement2(QUARTER, QUARTER, QUARTER, QUARTER,
+                    layer, ScaleMode.INSCRIBE, s);
+        } else if (d != null) {
+            result = new MarkupDrawableElement2(QUARTER, QUARTER, QUARTER, QUARTER,
+                    layer, ScaleMode.INSCRIBE, d, null);
+        }
 
+        return result;
     }
 
     private static int getKeyBackgroundForAction(String action) {

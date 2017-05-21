@@ -12,6 +12,10 @@ public class MarkupElement2 {
     private final int layer;
     private final ScaleMode scaleMode;
 
+    public MarkupElement2(int layer) {
+        this(0f, 0f, 0f, 0f, layer, ScaleMode.SCALE);
+    }
+
     public MarkupElement2(float marginLeft,
                           float marginTop,
                           float marginRight,

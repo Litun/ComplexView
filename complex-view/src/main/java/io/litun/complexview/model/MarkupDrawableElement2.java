@@ -12,6 +12,14 @@ public class MarkupDrawableElement2 extends MarkupElement2 {
     @Nullable
     private final Drawable selectedDrawable;
 
+    public MarkupDrawableElement2(int layer,
+                                  Drawable defaultDrawable,
+                                  @Nullable Drawable selectedDrawable) {
+        super(layer);
+        this.defaultDrawable = defaultDrawable;
+        this.selectedDrawable = selectedDrawable;
+    }
+
     public MarkupDrawableElement2(float marginLeft,
                                   float marginTop,
                                   float marginRight,

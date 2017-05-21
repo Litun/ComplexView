@@ -14,11 +14,15 @@ import android.view.View;
 
 import java.util.List;
 
+import io.litun.complexview.model.Markup2;
 import io.litun.complexview.model.MarkupDrawableElement;
-import io.litun.complexview.model.MarkupElement;
+import io.litun.complexview.model.MarkupDrawableElement2;
+import io.litun.complexview.model.MarkupElement2;
 import io.litun.complexview.model.MarkupFrame;
-import io.litun.complexview.model.MarkupClickableElement;
+import io.litun.complexview.model.MarkupFrame2;
 import io.litun.complexview.model.MarkupTextElement;
+import io.litun.complexview.model.MarkupTextElement2;
+import io.litun.complexview.model.ScaleMode;
 
 /**
  * Created by Litun on 17.03.17.
@@ -32,12 +36,12 @@ public class ComplexView extends View {
     private final Rect textBounds = new Rect();
     private final Paint paint = new Paint();
 
-    private OnSeatClickListener seatClickListener;
+    private OnFrameClickListener frameClickListener;
     private ComplexViewModel viewModel;
+    private float deltaX = 1f;
+    private float deltaY = 1f;
     private float widthScale = 1f;
     private float heightScale = 1f;
-    private State state = State.DETAILED;
-    private float transitionProgress = 0f;
     private float fontRatio = 1f;
 
     public ComplexView(Context context) {
@@ -60,43 +64,29 @@ public class ComplexView extends View {
         requestLayout();
     }
 
-    public void setSeatClickListener(OnSeatClickListener seatClickListener) {
-        this.seatClickListener = seatClickListener;
+    public void setFrameClickListener(OnFrameClickListener frameClickListener) {
+        this.frameClickListener = frameClickListener;
     }
 
-    public void updateTransitionProgress(float transitionProgress) {
-        this.transitionProgress = transitionProgress;
-    }
-
-    public void startTransition() {
-        this.transitionProgress = 0f;
-        state = State.TRANSITION;
-    }
-
-    public void finishTransition() {
-        this.transitionProgress = 1f;
-        state = State.DETAILED;
-    }
-
-    private MarkupClickableElement touchingSeat;
+    private MarkupFrame2 touchingFrame;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (seatClickListener != null) {
+        if (frameClickListener != null) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    touchingSeat = findSeatElement(event.getX(), event.getY());
-                    return touchingSeat != null;
+                    touchingFrame = findSeatElement(event.getX(), event.getY());
+                    return touchingFrame != null;
                 case MotionEvent.ACTION_CANCEL:
-                    touchingSeat = null;
+                    touchingFrame = null;
                     return false;
                 case MotionEvent.ACTION_UP:
-                    if (touchingSeat != null &&
+                    if (touchingFrame != null &&
                             insideFrame(event.getX() / widthScale, event.getY() / heightScale,
-                                    touchingSeat.getFrame())) {
-                        seatClickListener.onSeatClick(touchingSeat);
+                                    touchingFrame)) {
+                        frameClickListener.onSeatClick(touchingFrame);
                     }
-                    touchingSeat = null;
+                    touchingFrame = null;
                     return true;
             }
         }
@@ -145,40 +135,119 @@ public class ComplexView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (viewModel != null) {
-            widthScale = getWidth() / viewModel.getMarkup().getWidth();
-            heightScale = getHeight() / viewModel.getMarkup().getHeight();
-//            viewModel.onLayout(getWidth(), getHeight());
+            Markup2 markup = viewModel.getMarkup();
+            float width = right - left;
+            float height = bottom - top;
+            ScaleMode scaleMode = markup.getScaleMode();
+            switch (scaleMode) {
+                case SCALE:
+                    deltaX = 0;
+                    deltaY = 0;
+                    widthScale = width / markup.getWidth();
+                    heightScale = height / markup.getHeight();
+                    break;
+                case INSCRIBE:
+                    if (markup.getHeight() / markup.getWidth() > height / width) {
+                        widthScale = heightScale = height / markup.getHeight();
+                        deltaX = (width - height / markup.getHeight() * markup.getWidth()) / 2;
+                        deltaY = 0;
+                    } else {
+                        widthScale = heightScale = width / markup.getWidth();
+                        deltaX = 0;
+                        deltaY = (height - width / markup.getWidth() * markup.getHeight()) / 2;
+                    }
+                    break;
+            }
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (viewModel != null) {
-            List<List<MarkupElement>> layers = viewModel.getMarkup().getLayers();
-            drawLayer(canvas, layers.get(State.OVERVIEW.getLayerNumber()), 1f);
-            if (state == State.DETAILED) {
-                drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), 1f);
-            } else if (state == State.TRANSITION) {
-                drawLayer(canvas, layers.get(State.DETAILED.getLayerNumber()), transitionProgress);
+            drawFrames(canvas, viewModel.getMarkup().getFrames());
+        }
+    }
+
+    private void drawFrames(Canvas canvas, List<MarkupFrame2> frames) {
+        for (int j = 0; j < frames.size(); j++) {
+            MarkupFrame2 frame = frames.get(j);
+            drawFrame(canvas, frame);
+        }
+    }
+
+    private void drawFrame(Canvas canvas, MarkupFrame2 frame) {
+        float x = frame.getX() * widthScale + deltaX;
+        float y = frame.getY() * heightScale + deltaY;
+        float w = frame.getWidth() * widthScale;
+        float h = frame.getHeight() * heightScale;
+        for (int i = 0; i < frame.getElements().size(); i++) {
+            drawElement(canvas, frame.getElements().get(i), x, y, w, h);
+        }
+    }
+
+    private void drawElement(Canvas canvas, MarkupElement2 element, float x, float y, float w, float h) {
+        x += element.getMarginLeft() * w;
+        y += element.getMarginTop() * h;
+        w *= 1 - element.getMarginLeft() - element.getMarginRight();
+        h *= 1 - element.getMarginTop() - element.getMarginBottom();
+        if (element instanceof MarkupDrawableElement2) {
+            drawDrawableElement(canvas, (MarkupDrawableElement2) element, x, y, w, h, element.getScaleMode());
+        } else if (element instanceof MarkupTextElement2) {
+            drawTextElement(canvas, (MarkupTextElement2) element, x, y, w, h, element.getScaleMode());
+        }
+    }
+
+    private void drawTextElement(Canvas canvas, MarkupTextElement2 element,
+                                 float x, float y, float w, float h, ScaleMode scaleMode) {
+        String text = element.getText();
+        float alpha = 1f; // TODO: implement
+        // inscribe text by height
+        float textSize;
+        if (fontRatio / text.length() > h / w) {
+            textSize = h;
+        } else { // inscribe text by width
+            textSize = w / text.length() * fontRatio;
+        }
+        textPaint.setTextSize(textSize);
+        textPaint.getTextBounds(text, 0, text.length(), textBounds);
+        textPaint.setAlpha((int) (MAX_ALPHA * alpha));
+        float x1 = (x + w / 2) - textBounds.width() / 2f - textBounds.left;
+        float y1 = (y + h / 2) + textSize / 2f;
+        canvas.drawText(text,
+                x1,
+                y1,
+                textPaint);
+    }
+
+    private void drawDrawableElement(Canvas canvas, MarkupDrawableElement2 element,
+                                     float x, float y, float w, float h, ScaleMode scaleMode) {
+        Drawable drawable = element.getDefaultDrawable();
+        float alpha = 1f; // TODO: implement
+        float leftBound = x;
+        float topBound = y;
+        float rightBound = x + w;
+        float bottomBound = y + h;
+        if (scaleMode == ScaleMode.INSCRIBE) {
+            int drawableHeight = drawable.getIntrinsicHeight();
+            int drawableWidth = drawable.getIntrinsicWidth();
+            if (drawableHeight != -1 && drawableWidth != -1) {
+                if (h / w > (float) drawableHeight / drawableWidth) {
+                    float newHeight = w / drawableWidth * drawableHeight;
+                    y += (h - newHeight) / 2;
+                    h = newHeight;
+                } else {
+                    float newWidth = h / drawableHeight * drawableWidth;
+                    x += (w - newWidth) / 2;
+                    w = newWidth;
+                }
             }
         }
-    }
-
-    private void drawLayer(Canvas canvas, List<MarkupElement> layerElements, float alpha) {
-        for (int j = 0; j < layerElements.size(); j++) {
-            MarkupElement element = layerElements.get(j);
-            drawElement(canvas, element, alpha);
-        }
-    }
-
-    private void drawElement(Canvas canvas, MarkupElement element, float alpha) {
-        if (element instanceof MarkupDrawableElement) {
-            drawInFrame(canvas, ((MarkupDrawableElement) element).getDrawable(),
-                    element.getFrame(), alpha);
-        } else if (element instanceof MarkupTextElement) {
-            drawInFrame(canvas, ((MarkupTextElement) element).getText(), element.getFrame(),
-                    alpha);
-        }
+        drawable.setBounds((int) leftBound,
+                (int) topBound,
+                (int) rightBound,
+                (int) bottomBound);
+        drawable.setAlpha((int) (MAX_ALPHA * alpha));
+        drawable.draw(canvas);
     }
 
     private void drawInFrame(Canvas canvas, Drawable drawable, MarkupFrame frame, float alpha) {
@@ -251,43 +320,29 @@ public class ComplexView extends View {
         fontRatio = testTextHeight / testTextWidth;
     }
 
-    private MarkupClickableElement findSeatElement(float x, float y) {
-        float markupX = x / widthScale;
-        float markupY = y / heightScale;
-        List<MarkupElement> overviewElements = viewModel.getMarkup().getLayers().get(0);
-        for (MarkupElement element : overviewElements) {
-            if (element instanceof MarkupClickableElement &&
-                    insideFrame(markupX, markupY, element.getFrame())) {
-                return (MarkupClickableElement) element;
-            }
-        }
+    @Nullable
+    private MarkupFrame2 findSeatElement(float x, float y) {
+        // TODO: uncomment
+//        float markupX = x / widthScale;
+//        float markupY = y / heightScale;
+//        List<MarkupElement> overviewElements = viewModel.getMarkup().getLayers().get(0);
+//        for (MarkupElement element : overviewElements) {
+//            if (element instanceof MarkupClickableElement &&
+//                    insideFrame(markupX, markupY, element.getFrame())) {
+//                return (MarkupClickableElement) element;
+//            }
+//        }
         return null;
     }
 
-    private boolean insideFrame(float markupX, float markupY, MarkupFrame frame) {
+    private boolean insideFrame(float markupX, float markupY, MarkupFrame2 frame) {
         return markupX >= frame.getX() &&
                 markupX <= frame.getX() + frame.getWidth() &&
                 markupY > frame.getY() &&
                 markupY <= frame.getY() + frame.getHeight();
     }
 
-    public enum State {
-        OVERVIEW(0),
-        TRANSITION(1),
-        DETAILED(1);
-
-        private final int layerNumber;
-
-        State(int layerNumber) {
-            this.layerNumber = layerNumber;
-        }
-
-        public int getLayerNumber() {
-            return layerNumber;
-        }
-    }
-
-    public interface OnSeatClickListener {
-        void onSeatClick(MarkupClickableElement seatElement);
+    public interface OnFrameClickListener {
+        void onSeatClick(MarkupFrame2 frame);
     }
 }

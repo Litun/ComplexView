@@ -3,18 +3,19 @@ package io.litun.complexview;
 import android.content.Context;
 
 import io.litun.complexview.model.Markup;
+import io.litun.complexview.model.Markup2;
 
 /**
  * Created by Litun on 22.03.17.
  */
 public class ComplexViewModel {
-    private Markup markup;
+    private Markup2 markup;
 
-    public ComplexViewModel(Markup markup) {
+    public ComplexViewModel(Markup2 markup) {
         this.markup = markup;
     }
 
-    public Markup getMarkup() {
+    public Markup2 getMarkup() {
         return markup;
     }
 
@@ -41,7 +42,7 @@ public class ComplexViewModel {
 
         public ComplexViewModel build() {
             String stringFile = parser.readStringFile(fileName);
-            Markup markup = processor.process(stringFile, cache);
+            Markup2 markup = processor.process(stringFile, cache);
             return new ComplexViewModel(markup);
         }
     }

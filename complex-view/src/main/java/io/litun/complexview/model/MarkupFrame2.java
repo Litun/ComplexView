@@ -1,5 +1,7 @@
 package io.litun.complexview.model;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +57,10 @@ public class MarkupFrame2 {
             this.height = height;
         }
 
-        public Builder addElement(MarkupElement2 element) {
-            elements.add(element);
+        public Builder addElement(@Nullable MarkupElement2 element) {
+            if (element != null) {
+                elements.add(element);
+            }
             return this;
         }
 
