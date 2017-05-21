@@ -10,12 +10,13 @@ public class Markup2 {
     private final float width;
     private final float height;
     private final List<MarkupFrame2> frames;
-    private ScaleMode scaleMode = ScaleMode.INSCRIBE;
+    private ScaleMode scaleMode;
 
     public Markup2(Builder builder) {
         this.width = builder.width;
         this.height = builder.height;
         this.frames = builder.frames;
+        this.scaleMode = builder.scaleMode;
     }
 
     public float getWidth() {
@@ -41,6 +42,7 @@ public class Markup2 {
     public static class Builder {
         private float width;
         private float height;
+        private ScaleMode scaleMode = ScaleMode.INSCRIBE;
         private final List<MarkupFrame2> frames;
 
         public Builder() {
@@ -50,6 +52,11 @@ public class Markup2 {
         public Builder setSize(float width, float height) {
             this.width = width;
             this.height = height;
+            return this;
+        }
+
+        public Builder setScaleMode(ScaleMode scaleMode) {
+            this.scaleMode = scaleMode;
             return this;
         }
 
