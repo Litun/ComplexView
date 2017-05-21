@@ -5,25 +5,48 @@ package io.litun.complexview.model;
  */
 
 public class MarkupElement2 {
-    private float marginLeft;
-    private float marginTop;
-    private float marginRight;
-    private float marginBottom;
-    private int layer;
-    private HorizontalGravity horizontalGravity = HorizontalGravity.FILL;
-    private VerticalGravity verticalGravity = VerticalGravity.FILL;
+    private final float marginLeft;
+    private final float marginTop;
+    private final float marginRight;
+    private final float marginBottom;
+    private final int layer;
+    private final ScaleMode scaleMode;
 
-    public enum HorizontalGravity {
-        FILL,
-        CENTER,
-        LEFT,
-        RIGHT,
+    public MarkupElement2(float marginLeft,
+                          float marginTop,
+                          float marginRight,
+                          float marginBottom,
+                          int layer,
+                          ScaleMode scaleMode) {
+        this.marginLeft = marginLeft;
+        this.marginTop = marginTop;
+        this.marginRight = marginRight;
+        this.marginBottom = marginBottom;
+        this.layer = layer;
+        this.scaleMode = scaleMode;
     }
 
-    public enum VerticalGravity {
-        FILL,
-        CENTER,
-        TOP,
-        BOTTOM,
+    public float getMarginLeft() {
+        return marginLeft;
+    }
+
+    public float getMarginTop() {
+        return marginTop;
+    }
+
+    public float getMarginRight() {
+        return marginRight;
+    }
+
+    public float getMarginBottom() {
+        return marginBottom;
+    }
+
+    public int getLayer() {
+        return layer;
+    }
+
+    public ScaleMode getScaleMode() {
+        return scaleMode;
     }
 }

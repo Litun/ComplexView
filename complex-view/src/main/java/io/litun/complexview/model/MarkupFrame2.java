@@ -6,21 +6,19 @@ import java.util.List;
 /**
  * Created by Litun on 14.05.2017.
  */
-
 public class MarkupFrame2 {
-    private float x;
-    private float y;
-    private float width;
-    private float height;
-    HorizontalPosition horizontalPosition = HorizontalPosition.CENTER;
-    VerticalPosition verticalPosition = VerticalPosition.CENTER;
-    private final List<MarkupElement2> elements = new ArrayList<>();
+    private final float x;
+    private final float y;
+    private final float width;
+    private final float height;
+    private final List<MarkupElement2> elements;
 
-    public MarkupFrame2(float x, float y, float width, float height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    public MarkupFrame2(Builder builder) {
+        this.x = builder.x;
+        this.y = builder.y;
+        this.width = builder.width;
+        this.height = builder.height;
+        this.elements = builder.elements;
     }
 
     public float getX() {
@@ -39,37 +37,31 @@ public class MarkupFrame2 {
         return height;
     }
 
-    public HorizontalPosition getHorizontalPosition() {
-        return horizontalPosition;
-    }
-
-    public void setHorizontalPosition(HorizontalPosition horizontalPosition) {
-        this.horizontalPosition = horizontalPosition;
-    }
-
-    public VerticalPosition getVerticalPosition() {
-        return verticalPosition;
-    }
-
-    public void setVerticalPosition(VerticalPosition verticalPosition) {
-        this.verticalPosition = verticalPosition;
-    }
-
     public List<MarkupElement2> getElements() {
         return elements;
     }
 
-    public enum HorizontalPosition {
-        SCALE,
-        LEFT,
-        RIGHT,
-        CENTER,
-    }
+    public static class Builder {
+        private float x;
+        private float y;
+        private float width;
+        private float height;
+        private final List<MarkupElement2> elements = new ArrayList<>();
 
-    public enum VerticalPosition {
-        SCALE,
-        TOP,
-        BOTTOM,
-        CENTER,
+        public Builder(float x, float y, float width, float height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        public Builder addElement(MarkupElement2 element) {
+            elements.add(element);
+            return this;
+        }
+
+        public MarkupFrame2 build() {
+            return new MarkupFrame2(this);
+        }
     }
 }
