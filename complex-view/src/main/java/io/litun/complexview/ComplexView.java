@@ -233,12 +233,12 @@ public class ComplexView extends View {
             if (drawableHeight != -1 && drawableWidth != -1) {
                 if (h / w > (float) drawableHeight / drawableWidth) {
                     float newHeight = w / drawableWidth * drawableHeight;
-                    y += (h - newHeight) / 2;
-                    h = newHeight;
+                    topBound += (h - newHeight) / 2;
+                    bottomBound = topBound + newHeight;
                 } else {
                     float newWidth = h / drawableHeight * drawableWidth;
-                    x += (w - newWidth) / 2;
-                    w = newWidth;
+                    leftBound += (w - newWidth) / 2;
+                    rightBound = leftBound + newWidth;
                 }
             }
         }
