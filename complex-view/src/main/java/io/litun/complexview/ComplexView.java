@@ -73,17 +73,23 @@ public class ComplexView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (frameClickListener != null) {
+            float markupX = (event.getX() - deltaX) / widthScale;
+            float markupY = (event.getY() - deltaY) / heightScale;
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    touchingFrame = findSeatElement(event.getX(), event.getY());
+                    touchingFrame = findSeatElement(markupX, markupY);
                     return touchingFrame != null;
                 case MotionEvent.ACTION_CANCEL:
                     touchingFrame = null;
                     return false;
+                case MotionEvent.ACTION_MOVE:
+                    if (touchingFrame != null && !insideFrame(markupX, markupY, touchingFrame)) {
+                        touchingFrame = null;
+                    }
+                    return touchingFrame != null;
                 case MotionEvent.ACTION_UP:
                     if (touchingFrame != null &&
-                            insideFrame(event.getX() / widthScale, event.getY() / heightScale,
-                                    touchingFrame)) {
+                            insideFrame(markupX, markupY, touchingFrame)) {
                         frameClickListener.onSeatClick(touchingFrame);
                     }
                     touchingFrame = null;
@@ -321,17 +327,14 @@ public class ComplexView extends View {
     }
 
     @Nullable
-    private MarkupFrame2 findSeatElement(float x, float y) {
-        // TODO: uncomment
-//        float markupX = x / widthScale;
-//        float markupY = y / heightScale;
-//        List<MarkupElement> overviewElements = viewModel.getMarkup().getLayers().get(0);
-//        for (MarkupElement element : overviewElements) {
-//            if (element instanceof MarkupClickableElement &&
-//                    insideFrame(markupX, markupY, element.getFrame())) {
-//                return (MarkupClickableElement) element;
-//            }
-//        }
+    private MarkupFrame2 findSeatElement(float markupX, float markupY) {
+        List<MarkupFrame2> frames = viewModel.getMarkup().getFrames();
+        for (int i = 0; i < frames.size(); i++) {
+            MarkupFrame2 frame = frames.get(i);
+            if (insideFrame(markupX, markupY, frame)) {
+                return frame;
+            }
+        }
         return null;
     }
 
