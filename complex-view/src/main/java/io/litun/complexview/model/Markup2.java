@@ -12,7 +12,7 @@ public class Markup2 {
     private final List<MarkupFrame2> frames;
     private ScaleMode scaleMode;
 
-    public Markup2(Builder builder) {
+    private Markup2(Builder builder) {
         this.width = builder.width;
         this.height = builder.height;
         this.frames = builder.frames;

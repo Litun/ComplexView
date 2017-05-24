@@ -73,7 +73,6 @@ public class KeyboardActivity extends AppCompatActivity {
             }
         });
         new AsyncTask<Void, Void, ComplexViewModel>() {
-
             @Override
             protected ComplexViewModel doInBackground(Void... params) {
                 return new ComplexViewModel.Builder(KeyboardActivity.this)

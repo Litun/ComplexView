@@ -36,10 +36,12 @@ public class MarkupParser {
     }
 
     public String readStringFile(String name) {
-        try {
-            return readFile(name);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (name != null) {
+            try {
+                return readFile(name);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }

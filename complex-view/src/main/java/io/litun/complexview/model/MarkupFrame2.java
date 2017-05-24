@@ -15,7 +15,7 @@ public class MarkupFrame2 {
     private final float height;
     private final List<MarkupElement2> elements;
 
-    public MarkupFrame2(Builder builder) {
+    private MarkupFrame2(Builder builder) {
         this.x = builder.x;
         this.y = builder.y;
         this.width = builder.width;
