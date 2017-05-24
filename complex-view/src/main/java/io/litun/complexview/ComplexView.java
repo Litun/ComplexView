@@ -15,12 +15,10 @@ import android.view.View;
 import java.util.List;
 
 import io.litun.complexview.model.Markup2;
-import io.litun.complexview.model.MarkupDrawableElement;
 import io.litun.complexview.model.MarkupDrawableElement2;
 import io.litun.complexview.model.MarkupElement2;
 import io.litun.complexview.model.MarkupFrame;
 import io.litun.complexview.model.MarkupFrame2;
-import io.litun.complexview.model.MarkupTextElement;
 import io.litun.complexview.model.MarkupTextElement2;
 import io.litun.complexview.model.ScaleMode;
 
@@ -146,7 +144,7 @@ public class ComplexView extends View {
             float height = bottom - top;
             ScaleMode scaleMode = markup.getScaleMode();
             switch (scaleMode) {
-                case SCALE:
+                case FILL:
                     deltaX = 0;
                     deltaY = 0;
                     widthScale = width / markup.getWidth();
