@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".trainschemes.TrainSchemesActivity"/>
+        <activity android:name=".calendar.CalendarActivity"/>
         <activity android:name=".keyboard.KeyboardActivity"/>
     </application>
 

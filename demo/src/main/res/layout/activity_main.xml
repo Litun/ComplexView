@@ -4,14 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.litun.complexview.MainActivity">
-
-    <Button
-        android:id="@+id/train_schemes"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_margin="8dp"
-        android:text="@string/train_schemes_text" />
+    tools:context="io.litun.complexviewdemo.MainActivity">
 
     <Button
         android:id="@+id/keyboard"
@@ -19,5 +12,12 @@
         android:layout_height="64dp"
         android:layout_margin="8dp"
         android:text="@string/keyboard_text" />
+
+    <Button
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_margin="8dp"
+        android:text="@string/calendar_text" />
 
 </LinearLayout>

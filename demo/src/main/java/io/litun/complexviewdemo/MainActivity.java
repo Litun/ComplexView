@@ -7,7 +7,7 @@ import android.os.Bundle;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.litun.complexviewdemo.keyboard.KeyboardActivity;
-import io.litun.complexviewdemo.trainschemes.TrainSchemesActivity;
+import io.litun.complexviewdemo.calendar.CalendarActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,15 +18,15 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.train_schemes)
-    void openTrainSchemes() {
-        Intent intent = new Intent(this, TrainSchemesActivity.class);
-        startActivity(intent);
-    }
-
     @OnClick(R.id.keyboard)
     void openKeyboard() {
         Intent intent = new Intent(this, KeyboardActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.calendar)
+    void openCalendar() {
+        Intent intent = new Intent(this, CalendarActivity.class);
         startActivity(intent);
     }
 }
