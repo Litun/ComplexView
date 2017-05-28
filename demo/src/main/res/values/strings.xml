@@ -2,4 +2,8 @@
     <string name="app_name">ComplexView</string>
     <string name="calendar_text">Calendar</string>
     <string name="keyboard_text">Keyboard</string>
+    <string-array name="scale_modes_array">
+        <item>FILL</item>
+        <item>INSCRIBE</item>
+    </string-array>
 </resources>

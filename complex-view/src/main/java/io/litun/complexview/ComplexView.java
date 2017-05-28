@@ -343,6 +343,10 @@ public class ComplexView extends View {
                 markupY <= frame.getY() + frame.getHeight();
     }
 
+    public void setScaleMode(ScaleMode scaleMode) {
+        viewModel.getMarkup().setScaleMode(scaleMode);
+    }
+
     public interface OnFrameClickListener {
         void onSeatClick(MarkupFrame2 frame);
     }
