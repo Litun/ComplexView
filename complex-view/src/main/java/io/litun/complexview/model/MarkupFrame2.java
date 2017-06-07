@@ -14,6 +14,7 @@ public class MarkupFrame2 {
     private final float width;
     private final float height;
     private final List<MarkupElement2> elements;
+    private final Object metadata;
 
     private MarkupFrame2(Builder builder) {
         this.x = builder.x;
@@ -21,6 +22,8 @@ public class MarkupFrame2 {
         this.width = builder.width;
         this.height = builder.height;
         this.elements = builder.elements;
+        ;
+        this.metadata = builder.metadata;
     }
 
     public float getX() {
@@ -43,12 +46,17 @@ public class MarkupFrame2 {
         return elements;
     }
 
+    public Object getMetadata() {
+        return metadata;
+    }
+
     public static class Builder {
         private float x;
         private float y;
         private float width;
         private float height;
         private final List<MarkupElement2> elements = new ArrayList<>();
+        private Object metadata;
 
         public Builder(float x, float y, float width, float height) {
             this.x = x;
@@ -61,6 +69,11 @@ public class MarkupFrame2 {
             if (element != null) {
                 elements.add(element);
             }
+            return this;
+        }
+
+        public Builder setMetadata(Object metadata) {
+            this.metadata = metadata;
             return this;
         }
 

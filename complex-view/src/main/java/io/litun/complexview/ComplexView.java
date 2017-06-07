@@ -344,7 +344,9 @@ public class ComplexView extends View {
     }
 
     public void setScaleMode(ScaleMode scaleMode) {
-        viewModel.getMarkup().setScaleMode(scaleMode);
+        if (viewModel.getMarkup() != null) {
+            viewModel.getMarkup().setScaleMode(scaleMode);
+        }
     }
 
     public interface OnFrameClickListener {

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -106,6 +107,13 @@ public class KeyboardActivity extends AppCompatActivity {
                 keyboard.setData(complexViewModel);
             }
         }.execute();
+
+        keyboard.setFrameClickListener(new ComplexView.OnFrameClickListener() {
+            @Override
+            public void onSeatClick(MarkupFrame2 frame) {
+                Toast.makeText(KeyboardActivity.this, String.valueOf(frame.getMetadata()), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private static Markup2 makeMarkup(String object, ResourceCache resourceCache) {
@@ -126,6 +134,7 @@ public class KeyboardActivity extends AppCompatActivity {
                         resourceCache.getDrawable(R.drawable.keyboard_letter_key),
                         null));
                 frameBuilder.addElement(createLetterElement(1, markupItem.getLetter()));
+                frameBuilder.setMetadata(markupItem.getLetter());
             } else if (markupItem.getAction() != null) {
                 frameBuilder.addElement(new MarkupDrawableElement2(0,
                         resourceCache.getDrawable(getKeyBackgroundForAction(markupItem.getAction())),
